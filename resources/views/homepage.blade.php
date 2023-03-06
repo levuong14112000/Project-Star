@@ -200,11 +200,4 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="row set-pad">
-        <div class="col-lg-12 col-md-12 col-sm-12   col-lg-offset-1 col-md-offset-1 col-sm-offset-1" data-scroll-reveal="enter from the bottom after 0.4s">
-        @yield('slider')
-        </div>
-    </div>
-</div>
 @endsection

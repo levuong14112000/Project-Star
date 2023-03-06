@@ -8,12 +8,19 @@
 /*    transition:all linear 300ms;*/
 /*}*/
 .navbar-inverse .navbar-nav > li > a{
-    color : #777;!important;
+    color : #777 ;
 }
 body {
     font-family: 'Open Sans', sans-serif;
     line-height: 30px;
     font-size: 14px;
+}
+main{
+    min-height: 75vh;
+}
+
+.set-mar{
+    margin-top: 90px;
 }
 
 .set-pad {
@@ -26,7 +33,7 @@ body {
 
 /* SET LESSIONS */
 .set-lessions{
-    padding-top: 80px;
+    /* padding-top: 80px; */
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -54,8 +61,7 @@ body {
     letter-spacing: 1px;
     min-height: 70px;
 }
-.top_menu{
-}
+
 .nav{
     position: relative;
     list-style:none;
