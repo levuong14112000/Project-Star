@@ -14,7 +14,7 @@
         @endforeach
     </div>
     <div class="set-lessions">
-        <a href="{{route('download')}}" class="btn btn-primary">Download</a>
+        <a href="{{route('downloadpdf')}}" class="btn btn-primary">Download</a>
     </div>
 
 

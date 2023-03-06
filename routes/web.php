@@ -27,10 +27,10 @@ Route::post('postcontact',[\App\Http\Controllers\myController::class,'postcontac
 Route::get('lessionsshow/{id}/{key}',[\App\Http\Controllers\myController::class,'lessionsshow'])->name('lsshow');
 Route::get('/xuat-file-pdf', function () {
     $pdf = new Dompdf();
-    $pdf->loadHtml(view('testpdf')->render());
+    $pdf->loadHtml(view('downloadpdf')->render());
     $pdf->render();
-    return $pdf->stream('tên_file.pdf');
-})->name('download');
+    return $pdf->stream('download.pdf');
+})->name('downloadpdf');
 
 
 
