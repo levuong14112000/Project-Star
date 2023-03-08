@@ -8,8 +8,8 @@
     }
 
     .marquee {
-        display: inline-block;
-        padding-left: 100%;
+        display: table;
+        /*padding-left: 100%;*/
         animation: marquee 7s linear infinite;
     }
     /* Make it move */
@@ -24,9 +24,9 @@
     }
 
     .marquee1 {
-        display: inline-block;
-        padding-left: 100%;
-        animation: marquee 7s linear infinite;
+        display: table;
+        /*padding-left: 100%;*/
+        /*animation: marquee 7s linear infinite;*/
     }
     /* Make it move */
     @keyframes marquee1 {
@@ -34,25 +34,39 @@
         100% { transform: translate(-100%, 0); }
     }
 </style>
-<div>
+<div style="display: inline">
     <p id="toado" class="marquee1"></p>
     <p class="marquee"></p>
 </div>
 
-<script>
-    function showcoor(pos) {
-        var coord = pos.coords;
-        var long = coord.longitude;
-        var lat  = coord.latitude;
-        var boxhtml = document.getElementById("toado");
-        boxhtml.innerHTML = "Kinh độ: " + long + "<br>" + "Vĩ độ: " + lat;
+<script>if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Lấy địa chỉ từ tọa độ
+            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=YOUR_ACCESS_TOKEN`)
+                .then(response => response.json())
+                .then(data => {
+                    var address = data.features[0].place_name;
+                    console.log(`Địa chỉ của bạn là: ${address}`);
+
+                    // Lấy thời gian hiện tại
+                    var now = new Date();
+                    var hours = now.getHours();
+                    var minutes = now.getMinutes();
+                    var seconds = now.getSeconds();
+                    console.log(`Thời gian hiện tại là ${hours}:${minutes}:${seconds}`);
+                })
+                .catch(error => console.log(error));
+        });
+    } else {
+        console.log("Trình duyệt của bạn không hỗ trợ API Geolocation");
     }
-    var x = document.querySelector(".marquee");
-    var today = new Date();
-    var date = 'Ngày '+ today.getDate()+' Tháng '+(today.getMonth()+1)+' Năm '+today.getFullYear();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' ---- '+time;
-    document.querySelector(".marquee").innerHTML = dateTime;
-    navigator.geolocation.getCurrentPosition(showcoor);
+    var now = dayjs();
+    var formattedTime = now.format('HH:mm:ss');
+    console.log(`Thời gian hiện tại là: ${formattedTime}`);
 </script>
+
+
 <p id="hvn"></p>
