@@ -74,7 +74,7 @@ class myController extends Controller
             function ($mail) use ($request) {
                 $mail->to('infocheck0808@gmail.com', $request->name);
                 $mail->from($request->email);
-                $mail->subject('Test mail!');
+                $mail->subject('Contact Us Request!');
             }
         );
         return view('email.emailcontact')->with($fl);

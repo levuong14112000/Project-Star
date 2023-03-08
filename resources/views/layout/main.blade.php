@@ -25,7 +25,10 @@
 <!--NAVBAR SECTION END-->
 
 <!-- MAIN -->
-@yield('content')
+<main>
+    @yield('content')
+</main>
+
 <!-- END MAIN -->
 
 <!-- CONTACT SECTION END-->
