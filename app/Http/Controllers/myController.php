@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailer;
+use Dompdf\Dompdf;
 
 class myController extends Controller
 {
@@ -26,7 +27,15 @@ class myController extends Controller
             ->select('users.full_name', 'users.address', 'courses.course_name', 'users.decription', 'users.picture')
             ->distinct()
             ->get();
-        return view('homepage')->with('ds', $query)->with('ds1', $query1);
+
+        $xuat = DB::table('courses')
+            ->join('subject', 'subject.course_id', '=', 'courses.course_id')
+            ->join('lessions', 'lessions.subject_id', '=', 'subject.subject_id')
+            ->select('courses.course_name', 'subject.subject_name', 'lessions.lession_name', 'courses.price')
+            ->orderBy('courses.course_id', 'ASC')
+            ->get();
+
+        return view('homepage')->with('ds', $query)->with('ds1', $query1)->with('xuat', $xuat);
     }
     // public function khoahoc(){
     //     $query =DB::table('courses') //Sử dụng class DB
@@ -79,7 +88,8 @@ class myController extends Controller
         );
         return view('email.emailcontact')->with($fl);
     }
-    public function lessionview(){
+    public function lessionview()
+    {
         return view('slider');
     }
 
@@ -93,20 +103,20 @@ class myController extends Controller
             ->get();
 
         $qr = DB::table('lessions') //Sử dụng class DB
-            ->select("lession_name","lession_id")
+            ->select("lession_name", "lession_id")
             ->where('subject_id', '=', $key)
             ->orderBy('lession_name', 'ASC')
             ->get();
 
         $vd = DB::table('subject')
-        ->join('lessions', 'subject.subject_id', '=', 'lessions.subject_id')
-        ->select("subject.course_id", "subject.subject_name", "subject.content", "subject.picture", "subject.subject_id", "subject.picture", "lessions.lession_name","lessions.lession_id")
-        ->where([['subject.course_id', '=', $id],['subject.subject_id', '=', $key]])
-        ->orderBy('lessions.lession_name', 'ASC')
-        ->limit(1)
-        ->get();
+            ->join('lessions', 'subject.subject_id', '=', 'lessions.subject_id')
+            ->select("subject.course_id", "subject.subject_name", "subject.content", "subject.picture", "subject.subject_id", "subject.picture", "lessions.lession_name", "lessions.lession_id")
+            ->where([['subject.course_id', '=', $id], ['subject.subject_id', '=', $key]])
+            ->orderBy('lessions.lession_name', 'ASC')
+            ->limit(1)
+            ->get();
 
-return view('lessionsview')->with('vd', $vd)->with('ds', $query)->with('ls', $qr);
+        return view('lessionsview')->with('vd', $vd)->with('ds', $query)->with('ls', $qr);
 
         // return view('lessionsview')->with('ds', $query)->with('ls', $qr);
     }
@@ -125,6 +135,34 @@ return view('lessionsview')->with('vd', $vd)->with('ds', $query)->with('ls', $qr
             ->where('course_id', '=', $id)
             ->get();
 
-            return view('piccourse')->with('pc', $piccourse);
+        return view('piccourse')->with('pc', $piccourse);
+    }
+
+    //XUẤT PDF
+    // public function xuatpdf()
+    // {
+    //     $xuat = DB::table('courses')
+    //         ->join('subject', 'subject.course_id', '=', 'courses.course_id')
+    //         ->join('lessions', 'lessions.subject_id', '=', 'subject.subject_id')
+    //         ->select('courses.course_name', 'subject.subject_name', 'lessions.lession_name', 'courses.price')
+    //         ->orderBy('courses.course_id', 'ASC')
+    //         ->get();
+
+    //     return view('downloadpdf')->with('xuat', $xuat);
+    // }
+
+    public function printpdf()
+    {
+        $xuat = DB::table('courses')
+            ->join('subject', 'subject.course_id', '=', 'courses.course_id')
+            ->join('lessions', 'lessions.subject_id', '=', 'subject.subject_id')
+            ->select('courses.course_name', 'subject.subject_name', 'lessions.lession_name', 'courses.price')
+            ->orderBy('courses.course_id', 'ASC')
+            ->get();
+
+        $pdf = new Dompdf();
+        $pdf->loadHtml(view('downloadpdf',['xuat'=>$xuat])->render());
+        $pdf->render();
+        return $pdf->stream('download.pdf');
     }
 }
