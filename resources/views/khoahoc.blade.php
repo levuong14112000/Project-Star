@@ -1,5 +1,5 @@
 
-@foreach($ds as $n)
+@foreach($mn as $n)
 <div class="col-lg-4  col-md-4 col-sm-4" data-scroll-reveal="enter from the bottom after 0.4s">
     <div class="about-div">
         <div class="d-flex flex-column align-items-center col-3 form-group" style="

@@ -2,7 +2,7 @@
 @section("content")
 <div class="container" style="margin-top: 50px;">
     <div class="row">
-        @foreach($ds as $n)
+        @foreach($dt as $n)
         <div class="col-lg-4">
             <div class="about-div">
                 <a href="{{route('lsshow',[$n->course_id,$n->subject_id])}}">

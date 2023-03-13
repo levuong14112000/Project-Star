@@ -21,6 +21,7 @@ class myController extends Controller
             //
             ->orderBy('course_name', 'ASC')
             ->get();
+
         $query1 = DB::table('users')
             ->join('subject', 'users.user_id', '=', 'subject.user_id')
             ->join('courses', 'subject.course_id', '=', 'courses.course_id')
@@ -35,7 +36,9 @@ class myController extends Controller
             ->orderBy('courses.course_id', 'ASC')
             ->get();
 
-        return view('homepage')->with('ds', $query)->with('ds1', $query1)->with('xuat', $xuat);
+        
+
+        return view('homepage')->with('mn', $query)->with('ds1', $query1)->with('xuat', $xuat);
     }
     // public function khoahoc(){
     //     $query =DB::table('courses') //Sử dụng class DB
@@ -65,7 +68,13 @@ class myController extends Controller
             ->orderBy('lession_name', 'ASC')
             ->get();
 
-        return view('detailkhoahoc')->with('ds', $query)->with('ls', $qr);
+        $menu = DB::table('courses') //Sử dụng class DB
+            ->select("course_id", "course_name", "description", "price", "picture")
+            //
+            ->orderBy('course_name', 'ASC')
+            ->get();
+
+        return view('detailkhoahoc')->with('dt', $query)->with('ls', $qr)->with('mn',$menu);
     }
 
 
@@ -116,7 +125,13 @@ class myController extends Controller
             ->limit(1)
             ->get();
 
-        return view('lessionsview')->with('vd', $vd)->with('ds', $query)->with('ls', $qr);
+            $query = DB::table('courses') //Sử dụng class DB
+            ->select("course_id", "course_name", "description", "price", "picture")
+            //
+            ->orderBy('course_name', 'ASC')
+            ->get();
+
+        return view('lessionsview')->with('vd', $vd)->with('ds', $query)->with('ls', $qr)->with('mn',$query);
 
         // return view('lessionsview')->with('ds', $query)->with('ls', $qr);
     }
@@ -161,8 +176,19 @@ class myController extends Controller
             ->get();
 
         $pdf = new Dompdf();
-        $pdf->loadHtml(view('downloadpdf',['xuat'=>$xuat])->render());
+        $pdf->loadHtml(view('downloadpdf', ['xuat' => $xuat])->render());
         $pdf->render();
         return $pdf->stream('download.pdf');
+    }
+
+    public function outputmenu()
+    {
+        $query = DB::table('courses') //Sử dụng class DB
+            ->select("course_id", "course_name", "description", "price", "picture")
+            //
+            ->orderBy('course_name', 'ASC')
+            ->get();
+
+        return view('layout.main')->with('mn', $query);
     }
 }
