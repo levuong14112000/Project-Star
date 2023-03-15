@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\myController;
 use Dompdf\Dompdf;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +17,11 @@ use Dompdf\Dompdf;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class,'dashboard']);
 });
-Route::get('/main',[\App\Http\Controllers\myController::class,'main'])->name('main');
+Route::get('/login', [AdminController::class,'login'])->name('login');
+Route::get('/',[\App\Http\Controllers\myController::class,'main'])->name('main');
 Route::get('/test',[\App\Http\Controllers\myController::class,'lessionview']);
 Route::get('/khoahoc/{id}',[\App\Http\Controllers\myController::class,'detail'])->name('kh');
 Route::get('contact',[\App\Http\Controllers\myController::class,'contact'])->name('contact');

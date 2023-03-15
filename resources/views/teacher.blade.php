@@ -6,12 +6,12 @@
              <img  src="{{asset('img/teacher/'.$n->picture)}}" style="width:300px ;height:400px;object-fit: cover ;" class="img-rounded" />
         </div>
        
-        <h3>{{$n->full_name}}</h3>
+        <h3 style="text-align: center;">{{$n->full_name}}</h3>
         <hr />
-        <h4>{{$n->address}} <br />
+        <h4 style="text-align: center;">{{$n->address}} <br />
             {{$n->course_name}}
         </h4>
-        <p>
+        <p style="text-align: center;">
             {{$n->decription}}
         </p>
     </div>
