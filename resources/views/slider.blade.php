@@ -1,72 +1,56 @@
-
 <style>
-    /* Make it a marquee */
     .marquee {
-        margin: 0 auto;
+        position: relative;
+        width: 100vw;
+        max-width: 100%;
+        height: 50px;
+        overflow-x: hidden;
+    }
+    .track {
+        position: absolute;
         white-space: nowrap;
-        overflow: hidden;
+        will-change: transform;
+        animation: marquee 10s linear infinite;
     }
-
-    .marquee {
-        display: table;
-        /*padding-left: 100%;*/
-        animation: marquee 7s linear infinite;
-    }
-    /* Make it move */
     @keyframes marquee {
-        0%   { transform: translate(0, 0); }
-        100% { transform: translate(-100%, 0); }
-    }
-    .marquee1 {
-        margin: 0 auto;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-
-    .marquee1 {
-        display: table;
-        /*padding-left: 100%;*/
-        /*animation: marquee 7s linear infinite;*/
-    }
-    /* Make it move */
-    @keyframes marquee1 {
-        0%   { transform: translate(0, 0); }
-        100% { transform: translate(-100%, 0); }
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
     }
 </style>
-<div style="display: inline">
-    <p id="toado" class="marquee1"></p>
-    <p class="marquee"></p>
+<div class="marquee">
+    <div class="track">
+        <div class="address">
+
+        </div>
+    </div>
 </div>
-
-<script>if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-
-            // Lấy địa chỉ từ tọa độ
-            fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=YOUR_ACCESS_TOKEN`)
-                .then(response => response.json())
-                .then(data => {
-                    var address = data.features[0].place_name;
-                    console.log(`Địa chỉ của bạn là: ${address}`);
-
-                    // Lấy thời gian hiện tại
-                    var now = new Date();
-                    var hours = now.getHours();
-                    var minutes = now.getMinutes();
-                    var seconds = now.getSeconds();
-                    console.log(`Thời gian hiện tại là ${hours}:${minutes}:${seconds}`);
-                })
-                .catch(error => console.log(error));
-        });
-    } else {
-        console.log("Trình duyệt của bạn không hỗ trợ API Geolocation");
-    }
-    var now = dayjs();
-    var formattedTime = now.format('HH:mm:ss');
-    console.log(`Thời gian hiện tại là: ${formattedTime}`);
+<script>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                var curDate = new Date();
+                var curDay = curDate.getDate();
+                var curMonth = curDate.getMonth() + 1;
+                var curYear = curDate.getFullYear();
+                var curHours = curDate.getHours();
+                var curSeconds = curDate.getSeconds();
+                var curMinutes = curDate.getMinutes();
+                const lat = position.coords.latitude;
+                const long = position.coords.longitude;
+                const api_key = 'AIzaSyD4unJZ0VfF09vOXUlRe5_IgtZEOy9uwe4';
+                // Tạo URL yêu cầu Geocoding API
+                const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${api_key}`;
+                // Gửi yêu cầu GET đến API
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Xử lý kết quả trả về để lấy địa chỉ chính xác nhất
+                        const address = data.results[0].formatted_address;
+                        console.log(address);
+                        document.querySelector(".address").innerHTML = address + " , " +curHours +  " giờ " +curMinutes +  " phút " +curSeconds + " giây " +curDay + "/" +curMonth + "/" +curYear;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            });
+        }
 </script>
-
-
-<p id="hvn"></p>

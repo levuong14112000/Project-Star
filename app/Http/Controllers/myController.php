@@ -32,7 +32,7 @@ class myController extends Controller
         $xuat = DB::table('courses')
             ->join('subject', 'subject.course_id', '=', 'courses.course_id')
             ->join('lessions', 'lessions.subject_id', '=', 'subject.subject_id')
-            ->select('courses.course_name', 'subject.subject_name', 'lessions.lession_name', 'courses.price')
+            ->select('courses.course_name', 'subject.subject_name', 'lessions.lession_name', 'courses.price','subject.subject_id','subject.subject_name')
             ->orderBy('courses.course_id', 'ASC')
             ->get();
 
